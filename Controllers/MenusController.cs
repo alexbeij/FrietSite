@@ -7,26 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FrietSite.Data;
 using FrietSite.Models;
- 
 
 namespace FrietSite.Controllers
 {
-    public class ProductsController : Controller
+    public class MenusController : Controller
     {
         private readonly Db _context;
 
-        public ProductsController(Db context)
+        public MenusController(Db context)
         {
             _context = context;
         }
 
-        // GET: Products
+        // GET: Menus
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Products.ToListAsync());
+            return View(await _context.Menus.ToListAsync());
         }
 
-        // GET: Products/Details/5
+        // GET: Menus/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,64 +33,39 @@ namespace FrietSite.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(p => p.Category)
+            var menu = await _context.Menus
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (menu == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(menu);
         }
 
-        // GET: Products/Create
+        // GET: Menus/Create
         public IActionResult Create()
         {
-            var categories = _context.Categories.Select(c => new SelectListItem
-            {
-                Value = c.CategoryId.ToString(),
-                Text = c.Name
-            }).ToList();
-
-            var model = new ProductCreateViewModel
-            {
-                Categories = categories
-            };
-
-            return View(model);
+            return View();
         }
 
-        // POST: Products/Create
+        // POST: Menus/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductCreateViewModel model)
+        public async Task<IActionResult> Create([Bind("Id,Title")] Menu menu)
         {
             if (ModelState.IsValid)
             {
-                var product = new Product
-                {
-                    Name = model.Name,
-                    Price = model.Price,
-                    CategoryId = model.CategoryId // Koppel het product aan de geselecteerde categorie
-                };
-
-                _context.Add(product);
+                _context.Add(menu);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            // Als het model ongeldig is, laad de categorieën opnieuw
-            model.Categories = _context.Categories.Select(c => new SelectListItem
-            {
-                Value = c.CategoryId.ToString(),
-                Text = c.Name
-            }).ToList();
-
-            return View(model);
+            return View(menu);
         }
 
-        // GET: Products/Edit/5
+        // GET: Menus/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -99,20 +73,22 @@ namespace FrietSite.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var menu = await _context.Menus.FindAsync(id);
+            if (menu == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(menu);
         }
 
-        // POST: Products/Edit/5
+        // POST: Menus/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title")] Menu menu)
         {
-            if (id != product.Id)
+            if (id != menu.Id)
             {
                 return NotFound();
             }
@@ -121,12 +97,12 @@ namespace FrietSite.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(menu);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!MenuExists(menu.Id))
                     {
                         return NotFound();
                     }
@@ -137,10 +113,10 @@ namespace FrietSite.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(menu);
         }
 
-        // GET: Products/Delete/5
+        // GET: Menus/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,34 +124,34 @@ namespace FrietSite.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
+            var menu = await _context.Menus
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (menu == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(menu);
         }
 
-        // POST: Products/Delete/5
+        // POST: Menus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
+            var menu = await _context.Menus.FindAsync(id);
+            if (menu != null)
             {
-                _context.Products.Remove(product);
+                _context.Menus.Remove(menu);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool MenuExists(int id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return _context.Menus.Any(e => e.Id == id);
         }
     }
 }
