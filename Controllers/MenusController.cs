@@ -22,7 +22,11 @@ namespace FrietSite.Controllers
         // GET: Menus
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Menus.ToListAsync());
+            var categories = await _context.Categories
+                .Include(c => c.Products)
+                .ToListAsync();
+
+            return View(categories);  
         }
 
         // GET: Menus/Details/5
