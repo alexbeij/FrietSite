@@ -11,8 +11,9 @@ namespace FrietSite.Data
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Client> Clients { get; set; }
-        public DbSet<Category> Categories { get; set; }  // Nieuw toegevoegd
+        public DbSet<Category> Categories { get; set; }
         public DbSet<IdentityUser> Users { get; set; }
+        public DbSet<OrderHistory> OrderHistories { get; set; } // Correcte naamgeving
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -59,6 +60,11 @@ namespace FrietSite.Data
             modelBuilder.Entity<Order>().Property(o => o.Description).HasMaxLength(100);
             modelBuilder.Entity<Order>().HasData(
                 new Order { Id = 1, Description = "Bestelling 1" }
+            );
+
+            // **OrderHistory**
+            modelBuilder.Entity<OrderHistory>().HasData(
+                new OrderHistory { Id = 1 } // Zorg ervoor dat de lijst Orders later wordt toegevoegd
             );
 
             // Many-to-Many relatie tussen Client en Order
