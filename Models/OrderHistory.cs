@@ -5,5 +5,6 @@
     {
         public int Id { get; set; }
         public List<Order>? Orders { get; set; }
+        public int ClientId { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace FrietSite.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<IdentityUser> Users { get; set; }
-        public DbSet<OrderHistory> OrderHistories { get; set; } // Correcte naamgeving
+        public DbSet<OrderHistory> OrderHistories { get; set; }  
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -64,7 +64,7 @@ namespace FrietSite.Data
 
             // **OrderHistory**
             modelBuilder.Entity<OrderHistory>().HasData(
-                new OrderHistory { Id = 1 } // Zorg ervoor dat de lijst Orders later wordt toegevoegd
+                new OrderHistory { Id = 94 }  
             );
 
             // Many-to-Many relatie tussen Client en Order
