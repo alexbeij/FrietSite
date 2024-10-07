@@ -27,7 +27,7 @@
                         foreach (var product in Model.AvailableProducts)
                         {
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="product_@product.Id" name="SelectedProductIds" value="@product.Id" />
+                                <input type="checkbox" class="custom-control-input product-checkbox" id="product_@product.Id" name="SelectedProductIds" value="@product.Id" data-price="@product.Price" />
                                 <label class="custom-control-label" for="product_@product.Id">@product.Name (@product.Price.ToString("C"))</label>
                             </div>
                         }
@@ -40,6 +40,10 @@
             </div>
 
             <div class="form-group">
+                <label>Totaalprijs: <span id="total-price">€ 0,00</span></label>
+            </div>
+
+            <div class="form-group">
                 <input type="submit" value="Bestelling Aanmaken" class="btn btn-success" />
                 <a asp-action="Index" class="btn btn-secondary">Terug naar lijst</a>
             </div>
@@ -48,53 +52,24 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            const totalPriceElement = document.getElementById('total-price');
+
+            function calculateTotalPrice() {
+                let total = 0;
+                checkboxes.forEach(function(checkbox) {
+                    if (checkbox.checked) {
+                        total += parseFloat(checkbox.getAttribute('data-price'));
+                    }
+                });
+                totalPriceElement.textContent = '€ ' + total.toFixed(2);
+            }
+
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', calculateTotalPrice);
+            });
+        });
+    </script>
 }
-
-<style>
-    h1, h4 {
-        font-family: 'Arial', sans-serif;
-        color: #333;
-    }
-
-    .form-control {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        font-weight: bold;
-    }
-
-    .custom-control-label {
-        margin-left: 10px;
-        font-weight: normal;
-    }
-
-    .products-list {
-        max-height: 200px;
-        overflow-y: auto;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        margin-right: 10px;
-        border-radius: 5px;
-        font-size: 16px;
-    }
-
-    .btn-success {
-        background-color: #28a745;
-        color: white;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-    }
-</style>

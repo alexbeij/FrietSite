@@ -7,5 +7,6 @@
         public List<int> SelectedProductIds { get; set; } = new List<int>();  
         public string? Description { get; set; }
         public IEnumerable<Product>? AvailableProducts { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FrietSite.Data;
 using FrietSite.Models;
@@ -48,7 +46,7 @@ namespace FrietSite.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            var products = _context.Products.ToList();  
+            var products = _context.Products.ToList();
             var viewModel = new Orderviewmodel
             {
                 AvailableProducts = products
@@ -64,44 +62,33 @@ namespace FrietSite.Controllers
         {
             if (!ModelState.IsValid)
             {
-                foreach (var state in ModelState)
-                {
-                    var key = state.Key;
-                    var value = state.Value;
-
-                    Console.WriteLine($"Key: {key}");
-
-                    foreach (var error in value.Errors)
-                    {
-                        Console.WriteLine($"Error: {error.ErrorMessage}");
-                    }
-                }
+                viewModel.AvailableProducts = await _context.Products.ToListAsync();
+                return View(viewModel);
             }
 
+            // Haal de geselecteerde producten op
+            var selectedProducts = await _context.Products
+                .Where(p => viewModel.SelectedProductIds.Contains(p.Id))
+                .ToListAsync();
 
-            if (ModelState.IsValid)
+            // Bereken de totaalprijs
+            var totalPrice = selectedProducts.Sum(p => p.Price);
+
+            // Toon de totaalprijs in de view zonder het op te slaan
+            viewModel.TotalPrice = totalPrice;
+
+            // Als je de bestelling wilt opslaan
+            var order = new Order
             {
-                var selectedProducts = await _context.Products
-                    .Where(p => viewModel.SelectedProductIds.Contains(p.Id))
-                    .ToListAsync();
+                Description = viewModel.Description,
+                Products = selectedProducts
+            };
 
-                var order = new Order
-                {
-                    Description = viewModel.Description,
-                    Products = selectedProducts  
-                };
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
 
-                _context.Orders.Add(order);  
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-            }
-
-             
-            viewModel.AvailableProducts = await _context.Products.ToListAsync();
-            return View(viewModel);
+            return RedirectToAction(nameof(Index));
         }
-
 
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -149,7 +136,6 @@ namespace FrietSite.Controllers
                     }
 
                     order.Description = viewModel.Description;
-
 
                     var selectedProducts = await _context.Products
                         .Where(p => viewModel.SelectedProductIds.Contains(p.Id))

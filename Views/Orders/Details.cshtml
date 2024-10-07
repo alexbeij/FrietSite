@@ -17,19 +17,25 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
+
     <h4>Producten</h4>
     <ul>
         @foreach (var product in Model.Products)
         {
             <li>
                 @Html.DisplayFor(modelItem => product.Name) -
-                @Html.DisplayFor(modelItem => product.Price) -
-
+                @product.Price.ToString("C") <!-- Toon prijs als valuta -->
             </li>
         }
     </ul>
+
+    <!-- Totaalprijs weergeven -->
+    <h4>Totaalprijs</h4>
+    <p>
+        @Model.Products.Sum(p => p.Price).ToString("C") <!-- Bereken en toon de totaalprijs -->
+    </p>
 </div>
+
 <div>
-     
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Terug naar lijst</a>
 </div>
