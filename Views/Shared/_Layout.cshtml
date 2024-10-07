@@ -23,20 +23,16 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Orders" asp-action="Index">Bestelling plaatsen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Menus" asp-action="Index">Menus</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Menus" asp-action="Index">Menu</a>
                         </li>
 
-                         
-                        
+                        @if (User.Identity.Name == "alex@owner")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Products" asp-action="Index">Producten</a>
                             </li>
                         }
                     </ul>
@@ -52,9 +48,7 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - FrietSite - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+        
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
