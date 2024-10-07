@@ -1,35 +1,84 @@
 ﻿@model IEnumerable<FrietSite.Models.Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Bestellingen Overzicht";
 }
 
-<h1>Index</h1>
+<h1>Bestellingen Overzicht</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Nieuwe Bestelling Aanmaken</a>
 </p>
-<table class="table">
-    <thead>
+
+<table class="table table-hover table-bordered">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th></th>
+            <th>Acties</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Weet je zeker dat je deze bestelling wilt verwijderen?')">Verwijderen</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<style>
+    h1 {
+        margin-bottom: 20px;
+        font-family: 'Arial', sans-serif;
+        color: #333;
+    }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        font-size: 16px;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .btn {
+        margin-right: 5px;
+        padding: 5px 10px;
+        text-decoration: none;
+        color: white;
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: white;
+    }
+</style>

@@ -1,55 +1,50 @@
 ﻿@model FrietSite.Models.Orderviewmodel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nieuwe Bestelling";
 }
 
-<h1>Create</h1>
+<h1>Nieuwe Bestelling</h1>
 
-<h4>Order</h4>
+<h4>Order Informatie</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create" method="post">
-
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <label asp-for="Description" class="control-label">Beschrijving</label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Voeg een beschrijving toe..."></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-
             <div class="form-group">
-                <label>Producten</label>
-                @if (Model.AvailableProducts != null && Model.AvailableProducts.Any())
-                {
-                    foreach (var product in Model.AvailableProducts)
+                <label>Beschikbare Producten</label>
+                <div class="products-list">
+                    @if (Model.AvailableProducts != null && Model.AvailableProducts.Any())
                     {
-                        <div>
-                            <input type="checkbox" name="SelectedProductIds" value="@product.Id" />
-                            <label>@product.Name (@product.Price.ToString("C"))</label>
-                        </div>
+                        foreach (var product in Model.AvailableProducts)
+                        {
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="product_@product.Id" name="SelectedProductIds" value="@product.Id" />
+                                <label class="custom-control-label" for="product_@product.Id">@product.Name (@product.Price.ToString("C"))</label>
+                            </div>
+                        }
                     }
-                }
-                else
-                {
-                    <div>Geen beschikbare producten gevonden.</div>
-                }
+                    else
+                    {
+                        <div class="text-muted">Geen beschikbare producten gevonden.</div>
+                    }
+                </div>
             </div>
 
-            
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Bestelling Aanmaken" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary">Terug naar lijst</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
@@ -57,3 +52,49 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+<style>
+    h1, h4 {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+    }
+
+    .form-control {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .custom-control-label {
+        margin-left: 10px;
+        font-weight: normal;
+    }
+
+    .products-list {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        margin-right: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+</style>
