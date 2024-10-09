@@ -73,7 +73,7 @@ namespace FrietSite.Controllers
                 {
                     Name = model.Name,
                     Price = model.Price,
-                    CategoryId = model.CategoryId // Koppel het product aan de geselecteerde categorie
+                    CategoryId = model.CategoryId  
                 };
 
                 _context.Add(product);

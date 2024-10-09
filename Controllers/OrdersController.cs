@@ -66,18 +66,18 @@ namespace FrietSite.Controllers
                 return View(viewModel);
             }
 
-            // Haal de geselecteerde producten op
+             
             var selectedProducts = await _context.Products
                 .Where(p => viewModel.SelectedProductIds.Contains(p.Id))
                 .ToListAsync();
 
-            // Bereken de totaalprijs
+             
             var totalPrice = selectedProducts.Sum(p => p.Price);
 
-            // Toon de totaalprijs in de view zonder het op te slaan
+             
             viewModel.TotalPrice = totalPrice;
 
-            // Als je de bestelling wilt opslaan
+             
             var order = new Order
             {
                 Description = viewModel.Description,
